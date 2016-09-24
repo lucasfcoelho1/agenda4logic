@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Agenda Contatos</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css"/>
+    <script src="javascript/jquery-3.1.0.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="javascript/agenda.js"></script>
+
+    <style>
+        form#formulario {
+            background-color: #dddddd;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        
+        form#formulario input {
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="conteudo">
+
+        <div id="contatos">
+            <h2 class="text-center">Contatos</h2>
+            <table class="table table-striped" id="contacts-table">
+                <thead class="thead-default">
+                    <tr id="contacts-head">
+                        <th id="thNome">Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                                    
+                </tbody>
+            </table>
+            
+        </div>
+        <div class="row"></div>
+        <div class="text-center">
+            <button type="button" class="btn btn-default btn-lg" onclick="mostraModal(null)" data-toggle="modal" data-target="#myModal">
+                Adicionar novo contato
+            </button>
+        </div>
+        <div class="row"></div>
+
+        <!-- Modal -->
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Novo Contato</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formulario" action="#">
+                            <div class="form-group">
+                                <label for="nome">Nome:</label>
+                                <input type="text" class="form-control" name="nome" placeholder="Nome" id="nome" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" name="email" placeholder="Email" id="email" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="telefone">Telefone:</label>
+                                <input type="tel" class="form-control" name="telefone" placeholder="Telefone" id="telefone" />
+                            </div>
+
+                            <div class="form-group radio text-center">
+                                <label for="sexo">Sexo:</label> <br />
+                                <label class="radio-inline"><input type="radio" name="sexo" checked="checked" value="masculino">Masculino</label>
+                                <label class="radio-inline"><input type="radio" name="sexo" value="feminino">Feminino</label>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="endereco">Endereço:</label>
+                                <input type="text" class="form-control" name="endereco" placeholder="Endereço" id="endereco" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="obs">Observações:</label>
+                                <textarea class="form-control" rows="5" name="obs" placeholder="Observações" id="obs"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" name="salvar" class="btn btn-success" id="salvar" onclick="saveContact()" >Salvar</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>
