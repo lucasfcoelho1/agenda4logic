@@ -34,6 +34,10 @@ function load() {
     updateStorage(lstContacts);
 }
 
+function limparLocalStorage(){
+    localStorage.clear();
+}
+
 
 function addTabela(contact) {
     //cria a linha e chama coloca os valores
