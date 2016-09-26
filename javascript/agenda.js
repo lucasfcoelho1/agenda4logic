@@ -1,7 +1,13 @@
-﻿var id = 1;
+﻿
+
+
+function guid() {
+    return Math.floor((Math.random() * 100000) + 1);
+}
+
 $(document).ready(function () {
     //carrega no inicio
-    
+
     load();
 });
 
@@ -11,9 +17,9 @@ function load() {
     //se local storage vazio adiciona contatos exemplo
     if (localStorage.length == 0) {
         lstContacts = [
-            { 'id': ''+ id++ +'', 'nome': 'Lucas ', 'email': 'lucas.fernandes@forlogic.net', 'telefone': '(43) 9665-8960', 'sexo': '1', 'endereco': 'Rua dos Expedicionários, nº 312', 'obs': '', 'fav': '0' },
-            { 'id': '' + id++ + '', 'nome': 'Teste', 'email': 'teste@forlogic.net', 'telefone': '(00) 0000-0000', 'sexo': '3', 'endereco': 'end', 'obs': 'esta é uma observação', 'fav': '1' },
-            { 'id': '' + id++ + '', 'nome': 'Test2', 'email': 'test@exemplo.com', 'telefone': '(00) 0000-0000', 'sexo': '2', 'endereco': 'end', 'obs': '', 'fav': '0' },
+            { 'id': '' + guid() + '', 'nome': 'Lucas ', 'email': 'lucas.fernandes@forlogic.net', 'telefone': '43 96658960', 'sexo': '1', 'endereco': 'Rua dos Expedicionários, nº 312', 'obs': '', 'fav': '0' },
+            { 'id': '' + guid() + '', 'nome': 'Teste', 'email': 'teste@forlogic.net', 'telefone': '123456', 'sexo': '3', 'endereco': 'end', 'obs': 'esta é uma observação', 'fav': '1' },
+            { 'id': '' + guid() + '', 'nome': 'Test2', 'email': 'test@exemplo.com', 'telefone': '123456', 'sexo': '2', 'endereco': 'end', 'obs': '', 'fav': '0' },
         ];
 
     } else {
@@ -43,7 +49,7 @@ function addTabela(contact) {
     cols += contact['telefone'] + '';
     cols += '</td>';
     cols += '<td>';
-    cols += '<button type="button" class="btn btn-info" onlclick="mostraModal(' + contact['id'] + ') editContact="(' + contact['id'] + ')"" data-toggle="modal" data-target="#myModal" tittle="Editar"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> <button class="btn btn-danger" onclick="removeRow(this, ' + contact['id'] + ')"><i class="fa fa-trash-o" aria-hidden="true"></i></button> <button class="btn btn-default" onclick="mostraModal(' + contact['id'] + ')" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye" aria-hidden="true"></i></button>  <button type="button" class="btn btn-default" onlclick="mostraModal(' + contact['id'] + ')" ><i class="fa fa-heart-o" aria-hidden="true"></i></button> <button type="button" class="btn btn-default" onlclick="mostraModal(' + contact['id'] + ')" ><i class="fa fa-commenting-o" aria-hidden="true"></i></button>';
+    cols += '<button type="button" class="btn btn-info" onclick="mostraModal(1, ' + contact['id'] + ')" data-toggle="modal" data-target="#myModal" tittle="Editar"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button> <button class="btn btn-danger" onclick="removeRow(this, ' + contact['id'] + ')"><i class="fa fa-trash-o" aria-hidden="true"></i></button> <button class="btn btn-default" onclick="mostraModal(2, ' + contact['id'] + ')" data-toggle="modal" data-target="#myModal"><i class="fa fa-eye" aria-hidden="true"></i></button>  <button type="button" class="btn btn-default"  "><i onclick="setMark(this, ' + contact['id'] + ')"  class="' + (contact['fav'] == '0' ? 'fa fa-heart-o' : 'fa fa-heart') + ' " aria-hidden="true"></i></button> <button type="button" class="btn btn-default"  ><i class="' + (contact['obs'] == '' ? 'fa fa-commenting-o' : 'fa fa-commenting') + ' " aria-hidden="true"></i></button>';
 
 
     cols += '</td>';
@@ -96,10 +102,12 @@ function viewContact(contact_id) {
 
 }
 
-function mostraModal(contact_id) {
+function mostraModal(op, contact_id) {
     limpaForm();
 
-    if (contact_id != null) {
+    if (contact_id != null && op == 1) {
+        editContact(contact_id);
+    }else if (contact_id != null && op == 2) {
         viewContact(contact_id);
     }
 }
@@ -112,16 +120,22 @@ function limpaForm() {
 }
 
 function saveContact() {
+
+    var valida = validateForm();
+    if (valida == false)
+        return;
+
     var lstContacts = JSON.parse(localStorage.getItem('lstContacts'));
     if (lstContacts == null)
         lstContacts = [];
     lstContacts.push(
         {
-            'id': '' + id++ + '', 'nome': '' + $('#nome').val() + '', 'email': '' + $('#email').val() + '', 'telefone': '' + $('#telefone').val() + '', 'sexo': '1', 'endereco': '' + $('#endereco').val() + '', 'obs': '' + $('#obs').val() + '', 'fav': '0'
+            'id': '' + guid() + '', 'nome': '' + $('#nome').val() + '', 'email': '' + $('#email').val() + '', 'telefone': '' + $('#telefone').val() + '', 'sexo': '1', 'endereco': '' + $('#endereco').val() + '', 'obs': '' + $('#obs').val() + '', 'fav': '0'
         }
-            );
+    );
     addTabela(lstContacts[lstContacts.length - 1]);
     updateStorage(lstContacts);
+    $('#myModal').modal('hide');
 }
 
 
@@ -132,6 +146,8 @@ function updateStorage(lstContact) {
 }
 
 function editContact(contact_id) {
+    //mostraModal(contact_id);
+
     var lstContacts = JSON.parse(localStorage.getItem('lstContacts'));
     var i = 0;
     for (i = 0; i < lstContacts.length; i++) {
@@ -139,14 +155,54 @@ function editContact(contact_id) {
             break;
     }
 
-    $('#nome').val(lstContacts[i].nome)
-    $('#email').val(lstContacts[i].email)
-    $('#telefone').val(lstContacts[i].telefone)
-    $('#sexo').val(lstContacts[i].sexo)
-    $('#endereco').val(lstContacts[i].endereco)
-    $('#obs').val(lstContacts[i].obs)
+
+    $('#nome').val(lstContacts[i].nome);
+    $('#email').val(lstContacts[i].email);
+    $('#telefone').val(lstContacts[i]);
+    $('#sexo').val(lstContacts[i].sexo);
+    $('#endereco').val(lstContacts[i].endereco);
+    $('#obs').val(lstContacts[i].obs);
     
-    //saveContact()
+
+
+}
+function validateForm() {
+    var nome = $('#nome').val();
+    var email = $('#email').val();
+    var telefone = $('#telefone').val();
+    if (nome == '') {
+        alert("Não é possível armazenar um Nome em branco\nPor favor digite um Nome");
+        return false;
+    } if (email == '' && telefone == '') {
+        alert("Não é possível armazenar um Email e/ou Telefone em branco\nPor favor digite um Email e/ou Telefone");
+        return false;
+    }
 }
 
+function setMark(button, contact_id) {
 
+    var lstContacts = JSON.parse(localStorage.getItem('lstContacts'));
+    var i = 0;
+    for (i = 0; i < lstContacts.length; i++) {
+        if (lstContacts[i].id == contact_id)
+            break;
+    }
+    //alert('ola');
+    //var contact = JSON.parse(localStorage.getItem('lstContact'));
+    var btnId = $(button);
+    //var btnId = '#btnFav';
+    if (lstContacts[i].fav == '1') {
+        // alert('if')
+        $(btnId).removeClass('fa fa-heart');
+        $(btnId).addClass('fa fa-heart-o');
+        lstContacts[i].fav = '0';
+    } else if (lstContacts[i].fav == '0') {
+        //alert('else')
+        $(btnId).removeClass('fa fa-heart-o');
+        $(btnId).addClass('fa fa-heart');
+        lstContacts[i].fav = '1';
+    }
+    //alert('save')
+    //localStorage.setItem(lstContacts['id'], JSON.stringify(lstContacts));
+    updateStorage(lstContacts);
+}
