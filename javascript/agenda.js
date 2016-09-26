@@ -206,3 +206,21 @@ function setMark(button, contact_id) {
     //localStorage.setItem(lstContacts['id'], JSON.stringify(lstContacts));
     updateStorage(lstContacts);
 }
+function exportarContato() {
+    //var myWindow = window.open("", "MsgWindow");
+    var lstContacts = JSON.parse(localStorage.getItem('lstContacts'));
+    var i = 0;
+    for (i = 0; i < lstContacts.length; i++) {
+        $('#export').append('<br/>');
+        $('#export').append('id: ' + lstContacts[i].id + ' | ');
+        $('#export').append('Nome: ' + lstContacts[i].nome + ' | ');
+        $('#export').append('Email: ' + lstContacts[i].email + ' | ');
+        $('#export').append('Endereço: ' + lstContacts[i].endereco + ' | ');
+        $('#export').append('Observações: ' + lstContacts[i].obs + ' | ');
+        $('#export').append('<br/>');
+
+        //window.document.write('' + lstContacts[i].nome + '');
+            
+    }
+    $('#export').append('<br/>');
+}
